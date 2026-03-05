@@ -17,47 +17,23 @@ public class TrigonometricTest {
     @ParameterizedTest(name = "cos({0})")
     @DisplayName("Check corner and special values")
     @ValueSource(doubles = {
-            // базовые точки
-            -0.0,
-            0.0,
-
-            // близко к 0
-            -0.000001,
-            -0.0001,
-            0.0001,
-            0.000001,
-
-            // стандартные углы
-            -Math.PI,
-            -Math.PI / 2,
-            -Math.PI / 3,
-            -Math.PI / 4,
-            -Math.PI / 6,
-            Math.PI / 6,
-            Math.PI / 4,
-            Math.PI / 3,
-            Math.PI / 2,
-            Math.PI,
-
-            // периодичность / нормализация (большие x)
-            -2 * Math.PI,
-            2 * Math.PI,
-            -10 * Math.PI,
-            10 * Math.PI,
-            -1000.0,
-            1000.0,
-
-            // крайние double значения
-            Double.MIN_VALUE,
-            -Double.MIN_VALUE,
-
-            // спец. значения
-            Double.NaN,
-            Double.POSITIVE_INFINITY,
-            Double.NEGATIVE_INFINITY
+            -0.0, 0.0,
+            -0.000001, -0.0001, 0.0001, 0.000001,
+            -Math.PI, -Math.PI / 2, -Math.PI / 3, -Math.PI / 4, -Math.PI / 6,
+            Math.PI / 6, Math.PI / 4, Math.PI / 3, Math.PI / 2, Math.PI,
+            -2 * Math.PI, 2 * Math.PI, -10 * Math.PI, 10 * Math.PI,
+            -1000.0, 1000.0,
+            Double.MIN_VALUE, -Double.MIN_VALUE,
+            Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY
     })
     void checkCornerDots(double x) {
-        assertEquals(Math.cos(x), Trig.cos(x), EPS);
+        double actual = Trig.cos(x);
+
+        if (Double.isNaN(x) || Double.isInfinite(x)) {
+            assertTrue(Double.isNaN(actual), "cos(x) must be NaN for NaN/Infinity");
+        } else {
+            assertEquals(Math.cos(x), actual, EPS);
+        }
     }
 
     @ParameterizedTest(name = "cos({0}) = {1}")
@@ -99,7 +75,6 @@ public class TrigonometricTest {
     @Test
     @DisplayName("If cos(x, n) exists: check n behavior on a few points")
     void checkNParameterIfPresent() {
-        // Если у тебя нет cos(x, n), этот тест можно удалить.
         assertAll(
                 () -> assertEquals(1.0, Trig.cos(123.456, 0), 0.0),
                 () -> assertThrows(IllegalArgumentException.class, () -> Trig.cos(1.0, -1)),
