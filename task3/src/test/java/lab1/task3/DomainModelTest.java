@@ -26,142 +26,201 @@ class DomainModelTest {
         legs      = new Legs("согнутые");
     }
 
-    // ── Location ─────────────────────────────────────────────────────────────
-
     @Test
-    @DisplayName("Location stores its name correctly")
+    @DisplayName("Location корректно хранит имя")
     void testLocationName() {
         assertAll(
-            () -> assertEquals("угол", corner.getName()),
-            () -> assertEquals("угол", corner.toString()),
-            () -> assertEquals("комната", room.toString())
+                () -> assertEquals("угол", corner.getName()),
+                () -> assertEquals("угол", corner.toString()),
+                () -> assertEquals("комната", room.toString())
         );
     }
 
-    // ── RobotPart subclasses ──────────────────────────────────────────────────
-
     @Test
-    @DisplayName("Head has correct part name and initial condition")
+    @DisplayName("Head имеет правильное имя части и начальное состояние")
     void testHeadCreation() {
         assertAll(
-            () -> assertEquals("голова", head.getPartName()),
-            () -> assertEquals("неподвижная", head.getCondition()),
-            () -> assertEquals("голова", head.toString())
+                () -> assertEquals("голова", head.getPartName()),
+                () -> assertEquals("неподвижная", head.getCondition()),
+                () -> assertEquals("голова", head.toString())
         );
     }
 
     @Test
-    @DisplayName("Head.move updates condition and returns description")
+    @DisplayName("Head.move обновляет состояние и возвращает описание")
     void testHeadMove() {
         assertAll(
-            () -> assertEquals(
-                "Голова робота резко дернулась вверх.",
-                head.move("резко", "дернулась вверх")),
-            () -> assertEquals("резко, дернулась вверх", head.getCondition()),
-            () -> assertEquals(
-                "Голова робота едва заметно закачалась из стороны в сторону.",
-                head.move("едва заметно", "закачалась из стороны в сторону"))
+                () -> assertEquals(
+                        "Голова робота резко дернулась вверх.",
+                        head.move("резко", "дернулась вверх")),
+                () -> assertEquals("резко, дернулась вверх", head.getCondition()),
+                () -> assertEquals(
+                        "Голова робота едва заметно закачалась из стороны в сторону.",
+                        head.move("едва заметно", "закачалась из стороны в сторону"))
         );
     }
 
     @Test
-    @DisplayName("Legs have correct part name and initial condition")
+    @DisplayName("Legs имеют правильное имя части и состояние")
     void testLegsCreation() {
         assertAll(
-            () -> assertEquals("ноги", legs.getPartName()),
-            () -> assertEquals("согнутые", legs.getCondition()),
-            () -> assertEquals("ноги", legs.toString())
+                () -> assertEquals("ноги", legs.getPartName()),
+                () -> assertEquals("согнутые", legs.getCondition()),
+                () -> assertEquals("ноги", legs.toString())
         );
     }
 
-    // ── Character ─────────────────────────────────────────────────────────────
-
     @Test
-    @DisplayName("Character: isTrillian correctly identifies Trillian")
+    @DisplayName("Character корректно определяет Триллиан")
     void testIsTrillian() {
         assertAll(
-            () -> assertTrue(trillian.isTrillian()),
-            () -> assertFalse(bystander.isTrillian())
+                () -> assertTrue(trillian.isTrillian()),
+                () -> assertFalse(bystander.isTrillian())
         );
     }
 
     @Test
-    @DisplayName("Character.perceive: bystander always true, Trillian mirrors the argument")
+    @DisplayName("Character.perceive работает корректно")
     void testPerceive() {
         assertAll(
-            () -> assertTrue(bystander.perceive(true)),
-            () -> assertTrue(bystander.perceive(false)),
-            () -> assertTrue(trillian.perceive(true)),
-            () -> assertFalse(trillian.perceive(false))
+                () -> assertTrue(bystander.perceive(true)),
+                () -> assertTrue(bystander.perceive(false)),
+                () -> assertTrue(trillian.perceive(true)),
+                () -> assertFalse(trillian.perceive(false))
         );
     }
 
     @Test
-    @DisplayName("Character.toString: Trillian by name, others as 'посторонний наблюдатель'")
+    @DisplayName("Character.toString возвращает корректное имя")
     void testCharacterToString() {
         assertAll(
-            () -> assertEquals("Триллиан", trillian.toString()),
-            () -> assertEquals("посторонний наблюдатель", bystander.toString())
+                () -> assertEquals("Триллиан", trillian.toString()),
+                () -> assertEquals("посторонний наблюдатель", bystander.toString())
         );
     }
 
-    // ── Robot ─────────────────────────────────────────────────────────────────
-
     @Test
-    @DisplayName("Robot.toString returns the robot's name")
+    @DisplayName("Robot.toString возвращает имя робота")
     void testRobotToString() {
         assertAll(
-            () -> assertEquals("Робот", robot.toString()),
-            () -> assertNotEquals("Виталя", robot.toString())
+                () -> assertEquals("Робот", robot.toString()),
+                () -> assertNotEquals("Виталя", robot.toString())
         );
     }
 
     @Test
-    @DisplayName("Robot.sit returns correct sitting description")
+    @DisplayName("Robot.sit возвращает корректное описание")
     void testSit() {
         assertAll(
-            () -> assertEquals("Робот сидит в угол.", robot.sit(corner)),
-            () -> assertEquals("Робот сидит в комната.", robot.sit(room))
+                () -> assertEquals("Робот сидит в угол.", robot.sit(corner)),
+                () -> assertEquals("Робот сидит в комната.", robot.sit(room))
         );
     }
 
     @Test
-    @DisplayName("Robot.standUp returns correct rising description")
+    @DisplayName("Robot.standUp возвращает корректное описание")
     void testStandUp() {
         assertAll(
-            () -> assertEquals(
-                "Робот тяжело поднялся с угол на ноги.",
-                robot.standUp(corner, "тяжело", legs)),
-            () -> assertEquals(
-                "Робот медленно поднялся с комната на ноги.",
-                robot.standUp(room, "медленно", legs))
+                () -> assertEquals(
+                        "Робот тяжело поднялся с угол на ноги.",
+                        robot.standUp(corner, "тяжело", legs)),
+                () -> assertEquals(
+                        "Робот медленно поднялся с комната на ноги.",
+                        robot.standUp(room, "медленно", legs))
         );
     }
 
     @Test
-    @DisplayName("Robot.cross returns correct crossing description")
+    @DisplayName("Robot.cross возвращает описание с учетом состояния")
     void testCross() {
+        String result = robot.cross(room);
+
         assertAll(
-            () -> assertEquals("Робот героически пытается пересечь комната.", robot.cross(room)),
-            () -> assertEquals("Робот героически пытается пересечь угол.", robot.cross(corner))
+                () -> assertTrue(result.contains("пересечь комната")),
+                () -> assertTrue(result.contains("скорость")),
+                () -> assertTrue(result.contains("длина шага"))
         );
     }
 
     @Test
-    @DisplayName("Robot.stopBefore returns correct stop description")
+    @DisplayName("Robot.stopBefore возвращает корректное описание")
     void testStopBefore() {
         assertAll(
-            () -> assertEquals("Робот остановился перед Триллиан.", robot.stopBefore(trillian)),
-            () -> assertEquals("Робот остановился перед посторонний наблюдатель.", robot.stopBefore(bystander))
+                () -> assertEquals("Робот остановился перед Триллиан.", robot.stopBefore(trillian)),
+                () -> assertEquals("Робот остановился перед посторонний наблюдатель.", robot.stopBefore(bystander))
         );
     }
 
     @Test
-    @DisplayName("Robot.lookThrough returns correct gaze description")
+    @DisplayName("Robot.lookThrough возвращает корректное описание")
     void testLookThrough() {
         assertAll(
-            () -> assertEquals("Робот смотрит сквозь плечо Триллиан.", robot.lookThrough(trillian)),
-            () -> assertEquals("Робот смотрит сквозь плечо посторонний наблюдатель.", robot.lookThrough(bystander))
+                () -> assertEquals("Робот смотрит сквозь плечо Триллиан.", robot.lookThrough(trillian)),
+                () -> assertEquals("Робот смотрит сквозь плечо посторонний наблюдатель.", robot.lookThrough(bystander))
+        );
+    }
+
+    @Test
+    @DisplayName("move с координатами учитывает состояние робота")
+    void testMoveWithCoordinates() {
+        robot.standUp(corner, "тяжело", legs);
+
+        String result = robot.move(2, 3);
+
+        assertAll(
+                () -> assertTrue(result.contains("(2, 3)")),
+                () -> assertTrue(result.contains("скоростью")),
+                () -> assertTrue(result.contains("длиной шага"))
+        );
+    }
+
+    @Test
+    @DisplayName("move с enum Wall работает корректно")
+    void testMoveWithWall() {
+        robot.standUp(corner, "тяжело", legs);
+
+        String result = robot.move(Wall.LEFT);
+
+        assertAll(
+                () -> assertTrue(result.contains("левая стена")),
+                () -> assertTrue(result.contains("скоростью")),
+                () -> assertTrue(result.contains("длиной шага"))
+        );
+    }
+
+    @Test
+    @DisplayName("Состояние робота влияет на движение")
+    void testStateAffectsMovement() {
+        robot.standUp(corner, "тяжело", legs);
+        String tiredMove = robot.move(1, 1);
+
+        robot.cross(room);
+        String determinedMove = robot.move(1, 1);
+
+        assertAll(
+                () -> assertNotEquals(tiredMove, determinedMove),
+                () -> assertTrue(tiredMove.contains("скоростью")),
+                () -> assertTrue(determinedMove.contains("скоростью"))
+        );
+    }
+
+    @Test
+    @DisplayName("RobotState содержит корректные значения")
+    void testRobotStateValues() {
+        assertAll(
+                () -> assertEquals(0.5, RobotState.TIRED.getSpeedMultiplier()),
+                () -> assertEquals(1, RobotState.TIRED.getStepLength()),
+                () -> assertEquals(1.5, RobotState.DETERMINED.getSpeedMultiplier()),
+                () -> assertEquals(3, RobotState.DETERMINED.getStepLength())
+        );
+    }
+
+    @Test
+    @DisplayName("Wall корректно возвращает строковое представление")
+    void testWallEnum() {
+        assertAll(
+                () -> assertEquals("левая стена", Wall.LEFT.toString()),
+                () -> assertEquals("правая стена", Wall.RIGHT.toString())
         );
     }
 }

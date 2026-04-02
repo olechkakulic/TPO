@@ -20,6 +20,11 @@ public class App {
         bystander.perceive(false);
 
         robot.cross(room);
+
+        // 👇 ВСТАВИТЬ ВОТ СЮДА
+        robot.move(2, 3);
+        robot.move(Wall.LEFT);
+
         robot.stopBefore(trillian);
         robot.lookThrough(trillian);
     }
