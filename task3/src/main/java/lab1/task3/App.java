@@ -21,7 +21,6 @@ public class App {
 
         robot.cross(room);
 
-        // 👇 ВСТАВИТЬ ВОТ СЮДА
         robot.move(2, 3);
         robot.move(Wall.LEFT);
 
